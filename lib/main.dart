@@ -12,6 +12,6 @@ class MapsApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-        debugShowCheckedModeBanner: false, home: LoadingScreen());
+        debugShowCheckedModeBanner: false, home: GpsAccessScreen());
   }
 }
