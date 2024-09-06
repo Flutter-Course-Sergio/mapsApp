@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:geolocator/geolocator.dart';
@@ -6,6 +8,8 @@ part 'gps_event.dart';
 part 'gps_state.dart';
 
 class GpsBloc extends Bloc<GpsEvent, GpsState> {
+  StreamSubscription? gpsServiceSuscription;
+
   GpsBloc()
       : super(const GpsState(
             isGpsEnabled: false, isGpsPermissionGranted: false)) {
@@ -18,14 +22,19 @@ class GpsBloc extends Bloc<GpsEvent, GpsState> {
 
   Future<void> _init() async {
     final isEnabled = await _checkGpsStatus();
-    print('isEnabled: $isEnabled');
+
+    add(GpsPermissionEvent(
+        isGpsEnabled: isEnabled,
+        isGpsPermissionGranted: state.isGpsPermissionGranted));
   }
 
   Future<bool> _checkGpsStatus() async {
     final isEnable = await Geolocator.isLocationServiceEnabled();
-    Geolocator.getServiceStatusStream().listen((event) {
+    gpsServiceSuscription = Geolocator.getServiceStatusStream().listen((event) {
       final isEnabled = (event.index == 1) ? true : false;
-      print('service status $isEnabled');
+      add(GpsPermissionEvent(
+          isGpsEnabled: isEnabled,
+          isGpsPermissionGranted: state.isGpsPermissionGranted));
     });
 
     return isEnable;
@@ -33,7 +42,7 @@ class GpsBloc extends Bloc<GpsEvent, GpsState> {
 
   @override
   Future<void> close() {
-    // TODO: Limpiar Service Status Stream
+    gpsServiceSuscription?.cancel();
     return super.close();
   }
 }
