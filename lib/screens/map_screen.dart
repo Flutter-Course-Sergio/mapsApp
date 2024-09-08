@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../blocs/blocs.dart';
+import '../ui/ui.dart';
 import '../views/views.dart';
 import '../widgets/widgets.dart';
 
@@ -55,13 +56,23 @@ class _MapScreenState extends State<MapScreen> {
           CustomFloatingActionButton(
             icon: Icons.my_location_outlined,
             onPressed: () {
-              final mapBloc = BlocProvider.of<MapBloc>(context);
-              final userLocation = locationBloc.state.lastKnowLocation;
-              if (userLocation != null) mapBloc.moveCamera(userLocation);
+              moveCameraOnPressed(context);
             },
           )
         ],
       ),
     );
+  }
+
+  void moveCameraOnPressed(BuildContext context) {
+    final locationBloc = BlocProvider.of<LocationBloc>(context);
+    final mapBloc = BlocProvider.of<MapBloc>(context);
+    final userLocation = locationBloc.state.lastKnowLocation;
+    if (userLocation == null) {
+      final snackBar = CustomSnackbar(message: 'No hay ubicación');
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    } else {
+      mapBloc.moveCamera(userLocation);
+    }
   }
 }
