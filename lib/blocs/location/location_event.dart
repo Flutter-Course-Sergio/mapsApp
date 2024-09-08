@@ -12,3 +12,6 @@ class OnNewUserLocationEvent extends LocationEvent {
 
   const OnNewUserLocationEvent(this.newLocation);
 }
+
+class OnStartFollowingUser extends LocationEvent {}
+class OnStopFollowingUser extends LocationEvent {}

@@ -28,10 +28,19 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text('MapScreen'),
-      ),
-    );
+    return Scaffold(body: BlocBuilder<LocationBloc, LocationState>(
+      builder: (context, state) {
+        if (state.lastKnowLocation == null) {
+          return const Center(
+            child: Text('Espere por favor...'),
+          );
+        }
+
+        return Center(
+          child: Text(
+              '{${state.lastKnowLocation!.latitude}, ${state.lastKnowLocation!.longitude}}'),
+        );
+      },
+    ));
   }
 }
