@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../blocs/blocs.dart';
 
@@ -36,10 +37,13 @@ class _MapScreenState extends State<MapScreen> {
           );
         }
 
-        return Center(
-          child: Text(
-              '{${state.lastKnowLocation!.latitude}, ${state.lastKnowLocation!.longitude}}'),
-        );
+        final CameraPosition initialCameraPosition =
+            CameraPosition(target: state.lastKnowLocation!, zoom: 12);
+
+        return GoogleMap(
+            mapType: MapType.normal,
+            initialCameraPosition: initialCameraPosition,
+            myLocationEnabled: true);
       },
     ));
   }
