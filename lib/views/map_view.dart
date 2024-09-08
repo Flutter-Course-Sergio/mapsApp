@@ -16,6 +16,11 @@ class MapView extends StatelessWidget {
     return SizedBox(
         width: size.width,
         height: size.height,
-        child: GoogleMap(initialCameraPosition: initialCameraPosition));
+        child: GoogleMap(
+          initialCameraPosition: initialCameraPosition,
+          myLocationEnabled: true,
+          zoomControlsEnabled: false,
+          myLocationButtonEnabled: false,
+        ));
   }
 }
