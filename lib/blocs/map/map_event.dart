@@ -12,3 +12,7 @@ class OnMapInitializedEvent extends MapEvent {
 
   const OnMapInitializedEvent(this.controller);
 }
+
+class OnMapStartFollowingUser extends MapEvent {}
+
+class OnMapStopFollowingUser extends MapEvent {}

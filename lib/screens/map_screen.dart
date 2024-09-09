@@ -53,12 +53,17 @@ class _MapScreenState extends State<MapScreen> {
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
+          BlocBuilder<MapBloc, MapState>(builder: (context, state) {
+            return CustomFloatingActionButton(
+                icon: state.isFollowingUser
+                    ? Icons.directions_run_rounded
+                    : Icons.hail_rounded,
+                onPressed: () => startFollowingUser(context));
+          }),
           CustomFloatingActionButton(
             icon: Icons.my_location_outlined,
-            onPressed: () {
-              moveCameraOnPressed(context);
-            },
-          )
+            onPressed: () => moveCameraOnPressed(context),
+          ),
         ],
       ),
     );
@@ -74,5 +79,10 @@ class _MapScreenState extends State<MapScreen> {
     } else {
       mapBloc.moveCamera(userLocation);
     }
+  }
+
+  void startFollowingUser(BuildContext context) {
+    final mapBloc = BlocProvider.of<MapBloc>(context);
+    mapBloc.add(OnMapStartFollowingUser());
   }
 }
