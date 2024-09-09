@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart' show Polyline;
 
 import '../blocs/blocs.dart';
 import '../ui/ui.dart';
@@ -54,6 +55,10 @@ class _MapScreenState extends State<MapScreen> {
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
+          CustomFloatingActionButton(
+            icon: Icons.route_rounded,
+            onPressed: () => toggleShowPolyline(context),
+          ),
           BlocBuilder<MapBloc, MapState>(builder: (context, state) {
             return CustomFloatingActionButton(
                 icon: state.isFollowingUser
@@ -86,6 +91,11 @@ class _MapScreenState extends State<MapScreen> {
     final mapBloc = BlocProvider.of<MapBloc>(context);
     mapBloc.add(OnMapStartFollowingUser());
   }
+
+  void toggleShowPolyline(BuildContext context) {
+    final mapBloc = BlocProvider.of<MapBloc>(context);
+    mapBloc.add(OnToggleShowRoute());
+  }
 }
 
 class MapScrollView extends StatelessWidget {
@@ -100,12 +110,18 @@ class MapScrollView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Map<String, Polyline> polylines = Map.from(mapState.polylines);
+
+    if (!mapState.showMyRoute) {
+      polylines.removeWhere((key, value) => key == 'myRoute');
+    }
+
     return SingleChildScrollView(
       child: Stack(
         children: [
           MapView(
               initialLocation: locationState.lastKnowLocation!,
-              polylines: mapState.polylines.values.toSet()),
+              polylines: polylines.values.toSet()),
         ],
       ),
     );
