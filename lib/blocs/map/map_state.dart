@@ -5,7 +5,7 @@ class MapState extends Equatable {
   final bool isMapInitialized;
   final bool followUser;
 
-  const MapState({this.isMapInitialized = false, this.followUser = false});
+  const MapState({this.isMapInitialized = false, this.followUser = true});
 
   @override
   List<Object> get props => [isMapInitialized, followUser];
