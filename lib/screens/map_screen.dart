@@ -33,19 +33,20 @@ class _MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocBuilder<LocationBloc, LocationState>(
-        builder: (context, state) {
-          if (state.lastKnowLocation == null) {
+        builder: (context, locationState) {
+          if (locationState.lastKnowLocation == null) {
             return const Center(
               child: Text('Espere por favor...'),
             );
           }
 
-          return SingleChildScrollView(
-            child: Stack(
-              children: [
-                MapView(initialLocation: state.lastKnowLocation!),
-              ],
-            ),
+          return BlocBuilder<MapBloc, MapState>(
+            builder: (context, mapState) {
+              return MapScrollView(
+                locationState: locationState,
+                mapState: mapState,
+              );
+            },
           );
         },
       ),
@@ -84,5 +85,29 @@ class _MapScreenState extends State<MapScreen> {
   void startFollowingUser(BuildContext context) {
     final mapBloc = BlocProvider.of<MapBloc>(context);
     mapBloc.add(OnMapStartFollowingUser());
+  }
+}
+
+class MapScrollView extends StatelessWidget {
+  final LocationState locationState;
+  final MapState mapState;
+
+  const MapScrollView({
+    super.key,
+    required this.locationState,
+    required this.mapState,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Stack(
+        children: [
+          MapView(
+              initialLocation: locationState.lastKnowLocation!,
+              polylines: mapState.polylines.values.toSet()),
+        ],
+      ),
+    );
   }
 }
