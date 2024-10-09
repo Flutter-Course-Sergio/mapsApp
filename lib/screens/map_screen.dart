@@ -122,7 +122,8 @@ class MapScrollView extends StatelessWidget {
           MapView(
               initialLocation: locationState.lastKnowLocation!,
               polylines: polylines.values.toSet()),
-          CustomSearchBar()
+          const CustomSearchBar(),
+          const ManualMarker()
         ],
       ),
     );
