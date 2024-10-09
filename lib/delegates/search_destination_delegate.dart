@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-class SearchDestinationDelegate extends SearchDelegate {
+import '../models/models.dart';
+
+class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
   SearchDestinationDelegate() : super(searchFieldLabel: 'Buscar');
 
   @override
@@ -20,7 +22,8 @@ class SearchDestinationDelegate extends SearchDelegate {
     return IconButton(
       icon: const Icon(Icons.arrow_back_ios),
       onPressed: () {
-        close(context, null);
+        final result = SearchResult(cancel: true);
+        close(context, result);
       },
     );
   }
@@ -41,7 +44,8 @@ class SearchDestinationDelegate extends SearchDelegate {
             style: TextStyle(color: Colors.black),
           ),
           onTap: () {
-            close(context, null);
+            final result = SearchResult(cancel: false, manual: true);
+            close(context, result);
           },
         )
       ],
