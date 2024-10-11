@@ -19,6 +19,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }
 
   Future getCoordsStartToEnd(LatLng start, LatLng end) async {
-    final resp = trafficService.getCoordsStartToEnd(start, end);
+    final resp = await trafficService.getCoordsStartToEnd(start, end);
+
+    return resp;
   }
 }
