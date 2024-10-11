@@ -40,7 +40,7 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
         ListTile(
           leading: const Icon(Icons.location_on_outlined, color: Colors.black),
           title: const Text(
-            'Colocar la bicación manualmente',
+            'Colocar la ubicación manualmente',
             style: TextStyle(color: Colors.black),
           ),
           onTap: () {

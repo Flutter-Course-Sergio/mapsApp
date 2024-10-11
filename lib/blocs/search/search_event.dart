@@ -8,3 +8,4 @@ sealed class SearchEvent extends Equatable {
 }
 
 class OnActivateManualMarkerEvent extends SearchEvent {}
+class OnDeactivateManualMarkerEvent extends SearchEvent {}
