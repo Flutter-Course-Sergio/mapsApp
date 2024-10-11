@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -13,7 +14,9 @@ class CustomSearchBar extends StatelessWidget {
     return BlocBuilder<SearchBloc, SearchState>(
         builder: (context, state) => state.displayManualMarker
             ? const SizedBox()
-            : const _CustomSearchBarBody());
+            : FadeInDown(
+                duration: const Duration(milliseconds: 300),
+                child: const _CustomSearchBarBody()));
   }
 }
 
