@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../blocs/blocs.dart';
+import '../helpers/helpers.dart';
 
 class ManualMarker extends StatelessWidget {
   const ManualMarker({super.key});
@@ -68,9 +69,14 @@ class _ManualMarkerBody extends StatelessWidget {
                     final end = mapBloc.mapCenter;
                     if (end == null) return;
 
+                    showLoadingMsg(context);
+
                     final destination =
                         await searchBloc.getCoordsStartToEnd(start, end);
-                    mapBloc.drawRoutePolyline(destination);
+                    await mapBloc.drawRoutePolyline(destination);
+
+                    searchBloc.add(OnDeactivateManualMarkerEvent());
+                    if (context.mounted) Navigator.pop(context);
                   }),
             ),
           )

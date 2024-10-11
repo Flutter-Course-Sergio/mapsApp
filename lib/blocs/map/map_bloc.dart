@@ -81,7 +81,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     emit(state.copyWith(polylines: event.polylines));
   }
 
-  void drawRoutePolyline(RouteDestination destination) async {
+  Future drawRoutePolyline(RouteDestination destination) async {
     final myRoute = Polyline(
         polylineId: const PolylineId('route'),
         color: Colors.black,
