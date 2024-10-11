@@ -1,7 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_polyline_algorithm/google_polyline_algorithm.dart';
 
+import '../../models/models.dart';
 import '../../services/services.dart';
 
 part 'search_event.dart';
@@ -18,9 +20,21 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         (event, emit) => emit(state.copyWith(displayManualMarker: false)));
   }
 
-  Future getCoordsStartToEnd(LatLng start, LatLng end) async {
-    final resp = await trafficService.getCoordsStartToEnd(start, end);
+  Future<RouteDestination> getCoordsStartToEnd(LatLng start, LatLng end) async {
+    final trafficResponse =
+        await trafficService.getCoordsStartToEnd(start, end);
 
-    return resp;
+    final distance = trafficResponse.routes[0].distance;
+    final duration = trafficResponse.routes[0].duration;
+    final geometry = trafficResponse.routes[0].geometry;
+
+    final points = decodePolyline(geometry, accuracyExponent: 6);
+
+    final latLngList = points
+        .map((coords) => LatLng(coords[0].toDouble(), coords[1].toDouble()))
+        .toList();
+
+    return RouteDestination(
+        points: latLngList, duration: duration, distance: distance);
   }
 }
