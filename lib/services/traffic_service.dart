@@ -28,7 +28,8 @@ class TrafficService {
     return data;
   }
 
-  Future getResultsByQuery(LatLng proximity, String query) async {
+  Future<List<Feature>> getResultsByQuery(
+      LatLng proximity, String query) async {
     if (query.isEmpty) return [];
 
     final url = '$_basePlacesUrl/$query.json';
@@ -36,6 +37,8 @@ class TrafficService {
       'proximity': '${proximity.longitude},${proximity.latitude}'
     });
 
-    return [];
+    final placesResponse = PlacesResponse.fromJson(resp.data);
+
+    return placesResponse.features;
   }
 }
