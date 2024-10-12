@@ -79,10 +79,16 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   Future drawRoutePolyline(RouteDestination destination) async {
     final myRoute = createPolyline(id: 'route', points: destination.points);
 
-    final startMarker =
-        createMarker(id: 'start', position: destination.points.first);
-    final endMarker =
-        createMarker(id: 'end', position: destination.points.last);
+    final startMarker = createMarker(
+        id: 'start',
+        position: destination.points.first,
+        info: const InfoWindow(
+            title: 'Inicio', snippet: 'Este es el punto de inicio de la ruta'));
+    final endMarker = createMarker(
+        id: 'end',
+        position: destination.points.last,
+        info: const InfoWindow(
+            title: 'Fin', snippet: 'Este es el punto de fin de la ruta'));
 
     final currentPolylines = Map<String, Polyline>.from(state.polylines);
     currentPolylines['route'] = myRoute;
@@ -92,6 +98,9 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     currentMarkers['end'] = endMarker;
 
     add(OnDisplayPolylinesEvent(currentPolylines, currentMarkers));
+
+    await Future.delayed(const Duration(milliseconds: 300));
+    _mapController?.showMarkerInfoWindow(const MarkerId('start'));
   }
 
   void moveCamera(LatLng newLocation) {
@@ -99,8 +108,11 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     _mapController?.animateCamera(cameraUpdate);
   }
 
-  Marker createMarker({required String id, required LatLng position}) {
-    return Marker(markerId: MarkerId(id), position: position);
+  Marker createMarker(
+      {required String id,
+      required LatLng position,
+      required InfoWindow info}) {
+    return Marker(markerId: MarkerId(id), position: position, infoWindow: info);
   }
 
   Polyline createPolyline({required String id, required List<LatLng> points}) {
