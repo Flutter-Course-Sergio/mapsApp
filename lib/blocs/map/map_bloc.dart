@@ -79,11 +79,18 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   Future drawRoutePolyline(RouteDestination destination) async {
     final myRoute = createPolyline(id: 'route', points: destination.points);
 
+    double kms = destination.distance / 1000;
+    kms = (kms * 100).floorToDouble();
+    kms /= 100;
+
+    double tripDuration = (destination.duration / 60).floorToDouble();
+
     final startMarker = createMarker(
         id: 'start',
         position: destination.points.first,
-        info: const InfoWindow(
-            title: 'Inicio', snippet: 'Este es el punto de inicio de la ruta'));
+        info: InfoWindow(
+            title: 'Inicio',
+            snippet: 'Distance (Km): $kms, Duration: $tripDuration'));
     final endMarker = createMarker(
         id: 'end',
         position: destination.points.last,
