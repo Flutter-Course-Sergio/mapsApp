@@ -30,6 +30,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     final trafficResponse =
         await trafficService.getCoordsStartToEnd(start, end);
 
+    final endPlace = await trafficService.getInformationByCoords(end);
+
     final distance = trafficResponse.routes[0].distance;
     final duration = trafficResponse.routes[0].duration;
     final geometry = trafficResponse.routes[0].geometry;
@@ -41,7 +43,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         .toList();
 
     return RouteDestination(
-        points: latLngList, duration: duration, distance: distance);
+        points: latLngList,
+        duration: duration,
+        distance: distance,
+        endPlace: endPlace);
   }
 
   Future getPlacesByQuery(LatLng proximity, String query) async {
