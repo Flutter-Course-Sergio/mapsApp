@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart' show Polyline;
+import 'package:google_maps_flutter/google_maps_flutter.dart'
+    show Polyline, Marker;
 
 import '../blocs/blocs.dart';
 import '../ui/ui.dart';
@@ -120,8 +121,10 @@ class MapScrollView extends StatelessWidget {
       child: Stack(
         children: [
           MapView(
-              initialLocation: locationState.lastKnowLocation!,
-              polylines: polylines.values.toSet()),
+            initialLocation: locationState.lastKnowLocation!,
+            polylines: polylines.values.toSet(),
+            markers: mapState.markers.values.toSet(),
+          ),
           const CustomSearchBar(),
           const ManualMarker()
         ],

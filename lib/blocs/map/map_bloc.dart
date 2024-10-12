@@ -78,7 +78,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 
   void _onDrawRoutePolyline(OnDisplayPolylinesEvent event, Emitter emit) {
-    emit(state.copyWith(polylines: event.polylines));
+    emit(state.copyWith(polylines: event.polylines, markers: event.markers));
   }
 
   Future drawRoutePolyline(RouteDestination destination) async {
@@ -90,10 +90,16 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         startCap: Cap.roundCap,
         endCap: Cap.roundCap);
 
+    final startMarker = Marker(
+        markerId: const MarkerId('start'), position: destination.points.first);
+
     final currentPolylines = Map<String, Polyline>.from(state.polylines);
     currentPolylines['route'] = myRoute;
 
-    add(OnDisplayPolylinesEvent(currentPolylines));
+    final currentMarkers = Map<String, Marker>.from(state.markers);
+    currentMarkers['start'] = startMarker;
+
+    add(OnDisplayPolylinesEvent(currentPolylines, currentMarkers));
   }
 
   void moveCamera(LatLng newLocation) {
