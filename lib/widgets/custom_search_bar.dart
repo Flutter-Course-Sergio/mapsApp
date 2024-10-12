@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../blocs/blocs.dart';
 import '../delegates/delegates.dart';
+import '../helpers/helpers.dart';
 import '../models/models.dart';
 
 class CustomSearchBar extends StatelessWidget {
@@ -23,12 +24,24 @@ class CustomSearchBar extends StatelessWidget {
 class _CustomSearchBarBody extends StatelessWidget {
   const _CustomSearchBarBody();
 
-  void onSearchResults(BuildContext context, SearchResult result) {
+  void onSearchResults(BuildContext context, SearchResult result) async {
     final searchBloc = BlocProvider.of<SearchBloc>(context);
+    final locationBloc = BlocProvider.of<LocationBloc>(context);
+    final mapBloc = BlocProvider.of<MapBloc>(context);
 
     if (result.manual) {
       searchBloc.add(OnActivateManualMarkerEvent());
       return;
+    }
+
+    if (result.position != null) {
+      final start = locationBloc.state.lastKnowLocation!;
+      final end = result.position!;
+
+      showLoadingMsg(context);
+      final destination = await searchBloc.getCoordsStartToEnd(start, end);
+      await mapBloc.drawRoutePolyline(destination);
+      if (context.mounted) Navigator.pop(context);
     }
   }
 
