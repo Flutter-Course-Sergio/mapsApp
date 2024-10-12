@@ -37,4 +37,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     return RouteDestination(
         points: latLngList, duration: duration, distance: distance);
   }
+
+  Future getPlacesByQuery(LatLng proximity, String query) async {
+    final placesResponse = await trafficService.getResultsByQuery(proximity, query);
+  }
 }
