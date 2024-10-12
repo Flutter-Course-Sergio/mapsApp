@@ -59,13 +59,8 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 
   void _onUpdatePolylineEvent(UpdateUserPolylineEvent event, Emitter emit) {
-    final myRoute = Polyline(
-        polylineId: const PolylineId('myRoute'),
-        color: Colors.black,
-        width: 5,
-        startCap: Cap.roundCap,
-        endCap: Cap.roundCap,
-        points: event.locationHistory);
+    final myRoute =
+        createPolyline(id: 'myRoute', points: event.locationHistory);
 
     final currentPolylines = Map<String, Polyline>.from(state.polylines);
     currentPolylines['myRoute'] = myRoute;
@@ -82,22 +77,19 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 
   Future drawRoutePolyline(RouteDestination destination) async {
-    final myRoute = Polyline(
-        polylineId: const PolylineId('route'),
-        color: Colors.black,
-        width: 5,
-        points: destination.points,
-        startCap: Cap.roundCap,
-        endCap: Cap.roundCap);
+    final myRoute = createPolyline(id: 'route', points: destination.points);
 
-    final startMarker = Marker(
-        markerId: const MarkerId('start'), position: destination.points.first);
+    final startMarker =
+        createMarker(id: 'start', position: destination.points.first);
+    final endMarker =
+        createMarker(id: 'end', position: destination.points.last);
 
     final currentPolylines = Map<String, Polyline>.from(state.polylines);
     currentPolylines['route'] = myRoute;
 
     final currentMarkers = Map<String, Marker>.from(state.markers);
     currentMarkers['start'] = startMarker;
+    currentMarkers['end'] = endMarker;
 
     add(OnDisplayPolylinesEvent(currentPolylines, currentMarkers));
   }
@@ -105,6 +97,20 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   void moveCamera(LatLng newLocation) {
     final cameraUpdate = CameraUpdate.newLatLng(newLocation);
     _mapController?.animateCamera(cameraUpdate);
+  }
+
+  Marker createMarker({required String id, required LatLng position}) {
+    return Marker(markerId: MarkerId(id), position: position);
+  }
+
+  Polyline createPolyline({required String id, required List<LatLng> points}) {
+    return Polyline(
+        polylineId: PolylineId(id),
+        color: Colors.black,
+        width: 5,
+        startCap: Cap.roundCap,
+        endCap: Cap.roundCap,
+        points: points);
   }
 
   @override
