@@ -39,7 +39,22 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
 
     return BlocBuilder<SearchBloc, SearchState>(
       builder: (context, state) {
-        return Text('Resultados: ${state.places.length}');
+        final places = state.places;
+
+        return ListView.separated(
+          itemCount: places.length,
+          itemBuilder: (contes, i) {
+            final place = places[i];
+
+            return ListTile(
+              title: Text(place.text),
+              subtitle: Text(place.placeName),
+              leading: const Icon(Icons.place_outlined, color: Colors.black),
+              onTap: () {},
+            );
+          },
+          separatorBuilder: (context, _) => const Divider(),
+        );
       },
     );
   }

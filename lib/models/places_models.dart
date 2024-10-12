@@ -110,6 +110,9 @@ class Feature {
         "geometry": geometry.toJson(),
         "context": List<dynamic>.from(context.map((x) => x.toJson()))
       };
+
+  @override
+  String toString() => 'Feature: $text';
 }
 
 class Context {
