@@ -3,6 +3,11 @@ import 'package:flutter/material.dart';
 import '../models/models.dart';
 
 class StartMarkerPainter extends CustomPainter {
+  final int minutes;
+  final String destination;
+
+  StartMarkerPainter({required this.minutes, required this.destination});
+
   @override
   void paint(Canvas canvas, Size size) {
     final blackPaint = Paint()..color = Colors.black;
@@ -45,9 +50,9 @@ class StartMarkerPainter extends CustomPainter {
         align: TextAlign.center,
         minWidth: 70,
         maxWidth: 70,
-        text: '55'));
+        text: '$minutes'));
 
-        final minWordPainter = createTextPainter(CustomTextPainter(
+    final minWordPainter = createTextPainter(CustomTextPainter(
         color: Colors.white,
         fontSize: 20,
         fontWeight: FontWeight.w300,
@@ -57,8 +62,22 @@ class StartMarkerPainter extends CustomPainter {
         maxWidth: 70,
         text: 'Min'));
 
+    final locationPainter = createTextPainter(CustomTextPainter(
+        color: Colors.black,
+        fontSize: 20,
+        fontWeight: FontWeight.w300,
+        direction: TextDirection.ltr,
+        align: TextAlign.left,
+        minWidth: size.width - 135,
+        maxWidth: size.width - 135,
+        text: destination));
+
     minutesPainter.paint(canvas, const Offset(40, 35));
     minWordPainter.paint(canvas, const Offset(40, 68));
+
+    final double offsetY = (destination.length > 20) ? 35 : 48;
+
+    locationPainter.paint(canvas, Offset(120, offsetY));
   }
 
   @override
@@ -77,6 +96,8 @@ class StartMarkerPainter extends CustomPainter {
         text: customTextPainter.text);
 
     return TextPainter(
+      maxLines: 2,
+      ellipsis: '...',
       text: textSpan,
       textAlign: customTextPainter.align,
       textDirection: customTextPainter.direction,
