@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import '../helpers/helpers.dart';
 import '../models/models.dart';
 
-class StartMarkerPainter extends CustomPainter {
-  final int minutes;
+class EndMarkerPainter extends CustomPainter {
+  final int kilometers;
   final String destination;
 
-  StartMarkerPainter({required this.minutes, required this.destination});
+  EndMarkerPainter({required this.kilometers, required this.destination});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -18,28 +18,24 @@ class StartMarkerPainter extends CustomPainter {
     const double circleWhiteRadius = 7;
 
     // Black Circle
-    canvas.drawCircle(
-        Offset(circleBlackRadius, size.height - circleBlackRadius),
-        circleBlackRadius,
-        blackPaint);
+    canvas.drawCircle(Offset(size.width * 0.5, size.height - circleBlackRadius),
+        circleBlackRadius, blackPaint);
 
     // White Circle
-    canvas.drawCircle(
-        Offset(circleBlackRadius, size.height - circleBlackRadius),
-        circleWhiteRadius,
-        whitePaint);
+    canvas.drawCircle(Offset(size.width * 0.5, size.height - circleBlackRadius),
+        circleWhiteRadius, whitePaint);
 
     // White Box
     final path = Path();
-    path.moveTo(40, 20);
+    path.moveTo(10, 20);
     path.lineTo(size.width - 10, 20);
     path.lineTo(size.width - 10, 100);
-    path.lineTo(40, 100);
+    path.lineTo(10, 100);
     canvas.drawShadow(path, Colors.black, 10, false);
     canvas.drawPath(path, whitePaint);
 
     // Black Box
-    const blackBox = Rect.fromLTWH(40, 20, 70, 80);
+    const blackBox = Rect.fromLTWH(10, 20, 70, 80);
     canvas.drawRect(blackBox, blackPaint);
 
     // Trip Duration
@@ -51,7 +47,7 @@ class StartMarkerPainter extends CustomPainter {
         align: TextAlign.center,
         minWidth: 70,
         maxWidth: 70,
-        text: '$minutes'));
+        text: '$kilometers'));
 
     final minWordPainter = createTextPainter(CustomTextPainter(
         color: Colors.white,
@@ -61,7 +57,7 @@ class StartMarkerPainter extends CustomPainter {
         align: TextAlign.center,
         minWidth: 70,
         maxWidth: 70,
-        text: 'Min'));
+        text: 'Kms'));
 
     final locationPainter = createTextPainter(CustomTextPainter(
         color: Colors.black,
@@ -69,16 +65,16 @@ class StartMarkerPainter extends CustomPainter {
         fontWeight: FontWeight.w300,
         direction: TextDirection.ltr,
         align: TextAlign.left,
-        minWidth: size.width - 135,
-        maxWidth: size.width - 135,
+        minWidth: size.width - 95,
+        maxWidth: size.width - 95,
         text: destination));
 
-    minutesPainter.paint(canvas, const Offset(40, 35));
-    minWordPainter.paint(canvas, const Offset(40, 68));
+    minutesPainter.paint(canvas, const Offset(10, 35));
+    minWordPainter.paint(canvas, const Offset(10, 68));
 
-    final double offsetY = (destination.length > 20) ? 35 : 48;
+    final double offsetY = (destination.length > 25) ? 35 : 48;
 
-    locationPainter.paint(canvas, Offset(120, offsetY));
+    locationPainter.paint(canvas, Offset(90, offsetY));
   }
 
   @override
