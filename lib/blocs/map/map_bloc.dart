@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../helpers/helpers.dart';
 import '../../models/models.dart';
 import '../blocs.dart';
 
@@ -85,9 +86,12 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
     double tripDuration = (destination.duration / 60).floorToDouble();
 
+    final customMarker = await getAssetImageMarker();
+
     final startMarker = createMarker(
         id: 'start',
         position: destination.points.first,
+        marker: customMarker,
         info: InfoWindow(
             title: 'Inicio',
             snippet: 'Distance (Km): $kms, Duration: $tripDuration'));
@@ -95,6 +99,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     final endMarker = createMarker(
         id: 'end',
         position: destination.points.last,
+        marker: customMarker,
         info: InfoWindow(
             title: destination.endPlace.text,
             snippet: destination.endPlace.placeName));
@@ -120,8 +125,13 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   Marker createMarker(
       {required String id,
       required LatLng position,
+      required BitmapDescriptor marker,
       required InfoWindow info}) {
-    return Marker(markerId: MarkerId(id), position: position, infoWindow: info);
+    return Marker(
+        markerId: MarkerId(id),
+        position: position,
+        icon: marker,
+        infoWindow: info);
   }
 
   Polyline createPolyline({required String id, required List<LatLng> points}) {

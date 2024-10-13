@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart'
-    show Polyline, Marker;
+import 'package:google_maps_flutter/google_maps_flutter.dart' show Polyline;
 
 import '../blocs/blocs.dart';
 import '../ui/ui.dart';
