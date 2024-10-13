@@ -9,7 +9,7 @@ Future<BitmapDescriptor> getStartCustomMarker(
     int minutes, String destination) async {
   final recorder = ui.PictureRecorder();
   final canvas = ui.Canvas(recorder);
-  const size = ui.Size(350, 150);
+  const size = ui.Size(175, 75);
 
   final startMarker =
       StartMarkerPainter(minutes: minutes, destination: destination);
@@ -26,7 +26,7 @@ Future<BitmapDescriptor> getEndCustomMarker(
     int kilometers, String destination) async {
   final recorder = ui.PictureRecorder();
   final canvas = ui.Canvas(recorder);
-  const size = ui.Size(350, 150);
+  const size = ui.Size(175, 75);
 
   final endMarker =
       EndMarkerPainter(kilometers: kilometers, destination: destination);

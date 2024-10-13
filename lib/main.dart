@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+
 import 'blocs/blocs.dart';
 import 'config/config.dart';
 import 'screens/screens.dart';
@@ -31,6 +32,6 @@ class MapsApp extends StatelessWidget {
     return const MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'MapsApp',
-        home: TestMarkerScreen());
+        home: LoadingScreen());
   }
 }

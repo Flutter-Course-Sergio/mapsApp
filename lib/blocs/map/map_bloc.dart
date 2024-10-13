@@ -86,24 +86,20 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
     double tripDuration = (destination.duration / 60).floorToDouble();
 
-    final startCustomMarker = await getAssetImageMarker();
-    final endCustomMarker = await getNetworkImageMarker();
+    final startCustomMarker =
+        await getStartCustomMarker(tripDuration.toInt(), 'Mi ubicación');
+    final endCustomMarker = await getEndCustomMarker(kms.toInt(), destination.endPlace.text);
 
-    final startMarker = createMarker(
-        id: 'start',
+    final startMarker = Marker(
+        markerId: const MarkerId('start'),
+        anchor: const Offset(0.06, 1),
         position: destination.points.first,
-        marker: startCustomMarker,
-        info: InfoWindow(
-            title: 'Inicio',
-            snippet: 'Distance (Km): $kms, Duration: $tripDuration'));
+        icon: startCustomMarker);
 
-    final endMarker = createMarker(
-        id: 'end',
+    final endMarker = Marker(
+        markerId: const MarkerId('end'),
         position: destination.points.last,
-        marker: endCustomMarker,
-        info: InfoWindow(
-            title: destination.endPlace.text,
-            snippet: destination.endPlace.placeName));
+        icon: endCustomMarker);
 
     final currentPolylines = Map<String, Polyline>.from(state.polylines);
     currentPolylines['route'] = myRoute;
@@ -113,26 +109,11 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     currentMarkers['end'] = endMarker;
 
     add(OnDisplayPolylinesEvent(currentPolylines, currentMarkers));
-
-    await Future.delayed(const Duration(milliseconds: 300));
-    _mapController?.showMarkerInfoWindow(const MarkerId('start'));
   }
 
   void moveCamera(LatLng newLocation) {
     final cameraUpdate = CameraUpdate.newLatLng(newLocation);
     _mapController?.animateCamera(cameraUpdate);
-  }
-
-  Marker createMarker(
-      {required String id,
-      required LatLng position,
-      required BitmapDescriptor marker,
-      required InfoWindow info}) {
-    return Marker(
-        markerId: MarkerId(id),
-        position: position,
-        icon: marker,
-        infoWindow: info);
   }
 
   Polyline createPolyline({required String id, required List<LatLng> points}) {

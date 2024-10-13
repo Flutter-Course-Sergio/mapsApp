@@ -14,8 +14,8 @@ class StartMarkerPainter extends CustomPainter {
     final blackPaint = Paint()..color = Colors.black;
     final whitePaint = Paint()..color = Colors.white;
 
-    const double circleBlackRadius = 20;
-    const double circleWhiteRadius = 7;
+    const double circleBlackRadius = 10;
+    const double circleWhiteRadius = 3.5;
 
     // Black Circle
     canvas.drawCircle(
@@ -31,54 +31,54 @@ class StartMarkerPainter extends CustomPainter {
 
     // White Box
     final path = Path();
-    path.moveTo(40, 20);
-    path.lineTo(size.width - 10, 20);
-    path.lineTo(size.width - 10, 100);
-    path.lineTo(40, 100);
+    path.moveTo(20, 10);
+    path.lineTo(size.width - 10, 10);
+    path.lineTo(size.width - 10, 50);
+    path.lineTo(20, 50);
     canvas.drawShadow(path, Colors.black, 10, false);
     canvas.drawPath(path, whitePaint);
 
     // Black Box
-    const blackBox = Rect.fromLTWH(40, 20, 70, 80);
+    const blackBox = Rect.fromLTWH(20, 10, 35, 40);
     canvas.drawRect(blackBox, blackPaint);
 
     // Trip Duration
     final minutesPainter = createTextPainter(CustomTextPainter(
         color: Colors.white,
-        fontSize: 30,
+        fontSize: 15,
         fontWeight: FontWeight.w400,
         direction: TextDirection.ltr,
         align: TextAlign.center,
-        minWidth: 70,
-        maxWidth: 70,
+        minWidth: 35,
+        maxWidth: 35,
         text: '$minutes'));
 
     final minWordPainter = createTextPainter(CustomTextPainter(
         color: Colors.white,
-        fontSize: 20,
+        fontSize: 10,
         fontWeight: FontWeight.w300,
         direction: TextDirection.ltr,
         align: TextAlign.center,
-        minWidth: 70,
-        maxWidth: 70,
+        minWidth: 35,
+        maxWidth: 35,
         text: 'Min'));
 
     final locationPainter = createTextPainter(CustomTextPainter(
         color: Colors.black,
-        fontSize: 20,
+        fontSize: 10,
         fontWeight: FontWeight.w300,
         direction: TextDirection.ltr,
         align: TextAlign.left,
-        minWidth: size.width - 135,
-        maxWidth: size.width - 135,
+        minWidth: size.width - 70,
+        maxWidth: size.width - 70,
         text: destination));
 
-    minutesPainter.paint(canvas, const Offset(40, 35));
-    minWordPainter.paint(canvas, const Offset(40, 68));
+     minutesPainter.paint(canvas, const Offset(20, 15));
+     minWordPainter.paint(canvas, const Offset(20, 33));
 
-    final double offsetY = (destination.length > 20) ? 35 : 48;
+    final double offsetY = (destination.length > 19) ? 17 : 25;
 
-    locationPainter.paint(canvas, Offset(120, offsetY));
+    locationPainter.paint(canvas, Offset(60, offsetY));
   }
 
   @override
